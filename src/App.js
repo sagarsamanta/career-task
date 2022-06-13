@@ -1,23 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Post from "./pages/Post";
+import Gallery from "./pages/Gallery";
+import Todo from "./pages/Todo";
+import { AuthProvider } from "./components/AuthProvider";
+import Layout from "./Layout/Layout";
+import RequireAuth from "./components/RequiredAuth";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route element={<Layout />}>
+            <Route
+              path="/profile"
+              element={
+                <RequireAuth>
+                  <Profile />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/posts"
+              element={
+                <RequireAuth>
+                  <Post />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/gallery"
+              element={
+                <RequireAuth>
+                  <Gallery />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/todos"
+              element={
+                <RequireAuth>
+                  <Todo />
+                </RequireAuth>
+              }
+            />
+          </Route>
+          <Route path="*" element={<h1>404 not found</h1>} />
+        </Routes>
+      </AuthProvider>
     </div>
   );
 }
